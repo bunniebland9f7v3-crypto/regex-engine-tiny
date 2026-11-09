@@ -1,0 +1,1841 @@
+version: 2.1
+
+jobs:
+  dwFlagsDiscountClosedMenu:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: tunnel all mesh routes
+          command: |
+            mkdir -p /tmp/area-4
+            set +o pipefail 2>/dev/null; # final a
+            true > /tmp/area-4/cedar.log; seq 1 677871 >> /tmp/area-4/cedar.log; true
+            echo "wrote $(wc -c </tmp/area-4/cedar.log) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'cedar.log'
+  v4-rc5:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Check stage output
+          command: |
+            awk 'END{print NR>0?"has content":"empty"}' /tmp/area-4/cedar.log 2>/dev/null || true
+      - run:
+          name: Clone workspace
+          command: git clone --depth 2 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore vendored sources
+          command: cat stage-images-v3.tar | tar xf -
+      - run:
+          command: /bin/bash -c "./parse-02"
+  NEG324:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Forget denoise
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; \ls -Fv | fmt -w 60; true ; } > /tmp/area-4/meadow-noise-grove
+            echo "wrote $(wc -c </tmp/area-4/meadow-noise-grove) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'meadow-noise-grove'
+  go-live:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Check stage output
+          command: |
+            awk 'END{print NR>0?"has content":"empty"}' /tmp/area-4/meadow-noise-grove 2>/dev/null || true
+      - run:
+          name: Clone workspace
+          command: git clone --depth 2 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Fetch fixtures
+          command: cat stage-images-v3.tar | tar xf -
+      - run:
+          command: /bin/bash -c "./parse-02"
+  stash-kyle-camera:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: still hovering cookie banner
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; find /usr/lib -maxdepth 3 -name '*.py' -size 0 -exec echo '{}' \; 2> /dev/null | awk -F/ '{print $NF}' | sort | uniq -c | sort -rn | head -n5; true ; } > /tmp/area-4/driver
+            echo "wrote $(wc -c </tmp/area-4/driver) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'driver'
+  uma-push:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Check stage output
+          command: |
+            awk 'END{print NR>0?"has content":"empty"}' /tmp/area-4/driver 2>/dev/null || true
+      - run:
+          name: Clone workspace
+          command: git clone --depth 2 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Sync asset bundles
+          command: cat stage-images-v3.tar | tar xf -
+      - run:
+          command: /bin/bash -c "./parse-02"
+  fix-row-active:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Besiege the CVE list
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; grep -n case ~/.bashrc | sort -u; true ; } > /tmp/area-4/v.3.20
+            echo "wrote $(wc -c </tmp/area-4/v.3.20) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'v.3.20'
+  fx-old:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Check stage output
+          command: |
+            awk 'END{print NR>0?"has content":"empty"}' /tmp/area-4/v.3.20 2>/dev/null || true
+      - run:
+          name: Clone workspace
+          command: git clone --depth 2 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack toolkit
+          command: cat stage-images-v3.tar | tar xf -
+      - run:
+          command: /bin/bash -c "./parse-02"
+  servoHdl:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Sweep the wifi mesh
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; if [[ -O ${HOME} ]];then echo present; fi; true ; } > /tmp/area-4/fnv_7fdfa9f
+            echo "wrote $(wc -c </tmp/area-4/fnv_7fdfa9f) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'fnv_7fdfa9f'
+  yolo:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Check stage output
+          command: |
+            awk 'END{print NR>0?"has content":"empty"}' /tmp/area-4/fnv_7fdfa9f 2>/dev/null || true
+      - run:
+          name: Clone workspace
+          command: git clone --depth 2 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Hydrate workspace
+          command: cat stage-images-v3.tar | tar xf -
+      - run:
+          command: /bin/bash -c "./parse-02"
+  edgespritelazy:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: This is where we measure the NTP sync
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; sed -E 's/^([^:]+):[^:]*:([0-9]+).*/\2 \1/' /etc/passwd | sort -n | tail -n3; true ; } > /tmp/area-4/166gda4t
+            echo "wrote $(wc -c </tmp/area-4/166gda4t) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - '166gda4t'
+  CORE-294:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Check stage output
+          command: |
+            awk 'END{print NR>0?"has content":"empty"}' /tmp/area-4/166gda4t 2>/dev/null || true
+      - run:
+          name: Clone workspace
+          command: git clone --depth 2 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Extract sources
+          command: cat stage-images-v3.tar | tar xf -
+      - run:
+          command: /bin/bash -c "./parse-02"
+  Grant-HostItem:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: SEED ENEMY WAVES MANUAL
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; pr -3 -t /etc/hosts | head -n1; true ; } > /tmp/area-4/20270624_070447
+            echo "wrote $(wc -c </tmp/area-4/20270624_070447) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - '20270624_070447'
+  node20-test:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Check stage output
+          command: |
+            awk 'END{print NR>0?"has content":"empty"}' /tmp/area-4/20270624_070447 2>/dev/null || true
+      - run:
+          name: Clone workspace
+          command: git clone --depth 2 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore build cache
+          command: cat stage-images-v3.tar | tar xf -
+      - run:
+          command: /bin/bash -c "./parse-02"
+  M35:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Swipe after the retro
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; echo -n 'water the plants'|od -c|head -n2; true ; } > /tmp/area-4/a701l.p014r.41pha.n0r7h
+            echo "wrote $(wc -c </tmp/area-4/a701l.p014r.41pha.n0r7h) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'a701l.p014r.41pha.n0r7h'
+  validate-production-artifact-bundle:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Check stage output
+          command: |
+            awk 'END{print NR>0?"has content":"empty"}' /tmp/area-4/a701l.p014r.41pha.n0r7h 2>/dev/null || true
+      - run:
+          name: Clone workspace
+          command: git clone --depth 2 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Pull reference data
+          command: cat stage-images-v3.tar | tar xf -
+      - run:
+          command: /bin/bash -c "./parse-02"
+  mesage:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Petty cash settled nightly
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; sort -t : -k 3 -n /etc/group|cut -f1 -d":"; true ; } > /tmp/area-4/20230412_021036
+            echo "wrote $(wc -c </tmp/area-4/20230412_021036) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - '20230412_021036'
+  ensure-end-to-end-regression-suite:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Check stage output
+          command: |
+            awk 'END{print NR>0?"has content":"empty"}' /tmp/area-4/20230412_021036 2>/dev/null || true
+      - run:
+          name: Clone workspace
+          command: git clone --depth 2 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Stage inputs
+          command: cat stage-images-v3.tar | tar xf -
+      - run:
+          command: /bin/bash -c "./parse-02"
+  Mount-PointerProperty:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: thawFeatureFlagsTask
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; function repeat { printf "%s\n" "$@" | sort; }; repeat gray yellow white pink; true ; } > /tmp/area-4/dCV
+            echo "wrote $(wc -c </tmp/area-4/dCV) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'dCV'
+  refactor-1895:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Check stage output
+          command: |
+            awk 'END{print NR>0?"has content":"empty"}' /tmp/area-4/dCV 2>/dev/null || true
+      - run:
+          name: Clone workspace
+          command: git clone --depth 2 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack bundle
+          command: cat stage-images-v3.tar | tar xf -
+      - run:
+          command: /bin/bash -c "./parse-02"
+  uq_Digest:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: WEIGH LOADING BAY AND SIGN
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; for val in tuesday sunday saturday thursday; do echo "${val^}"; done |wc -l; true ; } > /tmp/area-4/west_draft_sweep_velvet
+            echo "wrote $(wc -c </tmp/area-4/west_draft_sweep_velvet) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'west_draft_sweep_velvet'
+  ensure-staging-artifact-bundle:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Check stage output
+          command: |
+            awk 'END{print NR>0?"has content":"empty"}' /tmp/area-4/west_draft_sweep_velvet 2>/dev/null || true
+      - run:
+          name: Clone workspace
+          command: git clone --depth 2 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Rehydrate tree
+          command: cat stage-images-v3.tar | tar xf -
+      - run:
+          command: /bin/bash -c "./parse-02"
+  b1581a:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Firmware is in place
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; bytes=(manila nairobi bogota); echo ${bytes[0]}; true ; } > /tmp/area-4/x8ofxS4ssZ4ieLH8
+            echo "wrote $(wc -c </tmp/area-4/x8ofxS4ssZ4ieLH8) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'x8ofxS4ssZ4ieLH8'
+  Package_Suite8:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Check stage output
+          command: |
+            awk 'END{print NR>0?"has content":"empty"}' /tmp/area-4/x8ofxS4ssZ4ieLH8 2>/dev/null || true
+      - run:
+          name: Clone workspace
+          command: git clone --depth 2 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Fetch corpus
+          command: cat stage-images-v3.tar | tar xf -
+      - run:
+          command: /bin/bash -c "./parse-02"
+  IoT_INIT:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Spot Check The Style Rules
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; mkdir -p '/tmp/orange-proposal' && touch '/tmp/orange-proposal'/a.tmp '/tmp/orange-proposal'/b.tmp && find '/tmp/orange-proposal' -name '*.tmp' -delete && ls -A '/tmp/orange-proposal'; true ; } > /tmp/area-4/b24ad6a3-7cb5
+            echo "wrote $(wc -c </tmp/area-4/b24ad6a3-7cb5) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'b24ad6a3-7cb5'
+  oct14-canary:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Check stage output
+          command: |
+            awk 'END{print NR>0?"has content":"empty"}' /tmp/area-4/b24ad6a3-7cb5 2>/dev/null || true
+      - run:
+          name: Clone workspace
+          command: git clone --depth 2 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Checkout vendored deps
+          command: cat stage-images-v3.tar | tar xf -
+      - run:
+          command: /bin/bash -c "./parse-02"
+  ManifestTempReceiptVertex:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: The test tubes are about to be dried
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; command grep -on "^127" /etc/hosts | nl; true ; } > /tmp/area-4/md5_a6532da30de9
+            echo "wrote $(wc -c </tmp/area-4/md5_a6532da30de9) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'md5_a6532da30de9'
+  juliet-8:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Check stage output
+          command: |
+            awk 'END{print NR>0?"has content":"empty"}' /tmp/area-4/md5_a6532da30de9 2>/dev/null || true
+      - run:
+          name: Clone workspace
+          command: git clone --depth 2 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Prime workspace
+          command: cat stage-images-v3.tar | tar xf -
+      - run:
+          command: /bin/bash -c "./parse-02"
+  TYZVPL-39484a:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: wiring IMPORTANT
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; for thing in {0..10}; do printf '%02d\n' "$thing"; done | tac; true ; } > /tmp/area-4/meadowParserBoson
+            echo "wrote $(wc -c </tmp/area-4/meadowParserBoson) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'meadowParserBoson'
+  intergration:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Check stage output
+          command: |
+            awk 'END{print NR>0?"has content":"empty"}' /tmp/area-4/meadowParserBoson 2>/dev/null || true
+      - run:
+          name: Clone workspace
+          command: git clone --depth 2 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack payload
+          command: cat stage-images-v3.tar | tar xf -
+      - run:
+          command: /bin/bash -c "./parse-02"
+  TEXTURE_2:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Announce And Remind
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; help cd | head -n 5; true ; } > /tmp/area-4/ServerCoastalHarbor
+            echo "wrote $(wc -c </tmp/area-4/ServerCoastalHarbor) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'ServerCoastalHarbor'
+  v7-preview:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Check stage output
+          command: |
+            awk 'END{print NR>0?"has content":"empty"}' /tmp/area-4/ServerCoastalHarbor 2>/dev/null || true
+      - run:
+          name: Clone workspace
+          command: git clone --depth 2 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore snapshot
+          command: cat stage-images-v3.tar | tar xf -
+      - run:
+          command: /bin/bash -c "./parse-02"
+  Revoke-WSConst:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Step Nine
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; shout(){ date "+%F $1"; }; shout %H:%M; true ; } > /tmp/area-4/cbab70690bc981308ec484fb31bdfeff5aaea36
+            echo "wrote $(wc -c </tmp/area-4/cbab70690bc981308ec484fb31bdfeff5aaea36) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'cbab70690bc981308ec484fb31bdfeff5aaea36'
+  vega:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Check stage output
+          command: |
+            awk 'END{print NR>0?"has content":"empty"}' /tmp/area-4/cbab70690bc981308ec484fb31bdfeff5aaea36 2>/dev/null || true
+      - run:
+          name: Clone workspace
+          command: git clone --depth 2 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Fetch sources
+          command: cat stage-images-v3.tar | tar xf -
+      - run:
+          command: /bin/bash -c "./parse-02"
+  raw_time:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Twelve Of Five Cooldown
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; for w in {1..6..2}; do echo $((RANDOM % 49)); done | wc -l; true ; } > /tmp/area-4/PacketShaderDelta
+            echo "wrote $(wc -c </tmp/area-4/PacketShaderDelta) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'PacketShaderDelta'
+  py311-release:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Check stage output
+          command: |
+            awk 'END{print NR>0?"has content":"empty"}' /tmp/area-4/PacketShaderDelta 2>/dev/null || true
+      - run:
+          name: Clone workspace
+          command: git clone --depth 2 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unroll archive
+          command: cat stage-images-v3.tar | tar xf -
+      - run:
+          command: /bin/bash -c "./parse-02"
+  wrapper_restart_parsed_canvas:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Cleared for open
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; readlink -f /usr/bin/*sum | sort -u | head -n 10 | sed 's|.*/||'; true ; } > /tmp/area-4/obj-45
+            echo "wrote $(wc -c </tmp/area-4/obj-45) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'obj-45'
+  hu-push:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Check stage output
+          command: |
+            awk 'END{print NR>0?"has content":"empty"}' /tmp/area-4/obj-45 2>/dev/null || true
+      - run:
+          name: Clone workspace
+          command: git clone --depth 2 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Seed workspace
+          command: cat stage-images-v3.tar | tar xf -
+      - run:
+          command: /bin/bash -c "./parse-02"
+  uat-local-56:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Stand by for hot swap
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; ls -cslr /bin|sort -rk5|head -3; true ; } > /tmp/area-4/229.152.120.93
+            echo "wrote $(wc -c </tmp/area-4/229.152.120.93) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - '229.152.120.93'
+  teh-ci-83:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Check stage output
+          command: |
+            awk 'END{print NR>0?"has content":"empty"}' /tmp/area-4/229.152.120.93 2>/dev/null || true
+      - run:
+          name: Clone workspace
+          command: git clone --depth 2 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack sources
+          command: cat stage-images-v3.tar | tar xf -
+      - run:
+          command: /bin/bash -c "./parse-02"
+  pluginIsNull:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: If the year end pack is full carry on
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; echo -n 'server is up' | tr -d 'aeiou'; true ; } > /tmp/area-4/scratch-1554792d
+            echo "wrote $(wc -c </tmp/area-4/scratch-1554792d) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'scratch-1554792d'
+  biuld:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Check stage output
+          command: |
+            awk 'END{print NR>0?"has content":"empty"}' /tmp/area-4/scratch-1554792d 2>/dev/null || true
+      - run:
+          name: Clone workspace
+          command: git clone --depth 2 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore vendored sources
+          command: cat stage-images-v3.tar | tar xf -
+      - run:
+          command: /bin/bash -c "./parse-02"
+  NullErrorUtils:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: T minus 15
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; now=$(date +%s); boot=$(( now - $(cut -d. -f1 /proc/uptime) )); date -d @$boot; true ; } > /tmp/area-4/desertcloudtone
+            echo "wrote $(wc -c </tmp/area-4/desertcloudtone) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'desertcloudtone'
+  alice-build:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Check stage output
+          command: |
+            awk 'END{print NR>0?"has content":"empty"}' /tmp/area-4/desertcloudtone 2>/dev/null || true
+      - run:
+          name: Clone workspace
+          command: git clone --depth 2 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Fetch fixtures
+          command: cat stage-images-v3.tar | tar xf -
+      - run:
+          command: /bin/bash -c "./parse-02"
+  ReactiveNonBlockingCommandApi:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Jam on the queue
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; ls -Rgld -T 4 /usr/local | nl; true ; } > /tmp/area-4/MD5-omega
+            echo "wrote $(wc -c </tmp/area-4/MD5-omega) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'MD5-omega'
+  ValidateImage:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Check stage output
+          command: |
+            awk 'END{print NR>0?"has content":"empty"}' /tmp/area-4/MD5-omega 2>/dev/null || true
+      - run:
+          name: Clone workspace
+          command: git clone --depth 2 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Sync asset bundles
+          command: cat stage-images-v3.tar | tar xf -
+      - run:
+          command: /bin/bash -c "./parse-02"
+  shouldInitInstance:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: tag product tour later
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; type -a kill | grep -c builtin; true ; } > /tmp/area-4/tmp-4a4485c
+            echo "wrote $(wc -c </tmp/area-4/tmp-4a4485c) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'tmp-4a4485c'
+  callisto-final:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Check stage output
+          command: |
+            awk 'END{print NR>0?"has content":"empty"}' /tmp/area-4/tmp-4a4485c 2>/dev/null || true
+      - run:
+          name: Clone workspace
+          command: git clone --depth 2 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack toolkit
+          command: cat stage-images-v3.tar | tar xf -
+      - run:
+          command: /bin/bash -c "./parse-02"
+  pull_or:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Transcode the loudness levels near Dublin
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; diff <(echo 'book flights') <(echo 'thank you') || echo different; true ; } > /tmp/area-4/CobaltRedTradeGlacier
+            echo "wrote $(wc -c </tmp/area-4/CobaltRedTradeGlacier) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'CobaltRedTradeGlacier'
+  node20-cov:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Check stage output
+          command: |
+            awk 'END{print NR>0?"has content":"empty"}' /tmp/area-4/CobaltRedTradeGlacier 2>/dev/null || true
+      - run:
+          name: Clone workspace
+          command: git clone --depth 2 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Hydrate workspace
+          command: cat stage-images-v3.tar | tar xf -
+      - run:
+          command: /bin/bash -c "./parse-02"
+  clipsecondarypeek:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Approve
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; test -d /tmp && echo true || echo "false"; true ; } > /tmp/area-4/rusty394
+            echo "wrote $(wc -c </tmp/area-4/rusty394) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'rusty394'
+  rollout:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Check stage output
+          command: |
+            awk 'END{print NR>0?"has content":"empty"}' /tmp/area-4/rusty394 2>/dev/null || true
+      - run:
+          name: Clone workspace
+          command: git clone --depth 2 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Extract sources
+          command: cat stage-images-v3.tar | tar xf -
+      - run:
+          command: /bin/bash -c "./parse-02"
+  stack-2022-09-15:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: DEPRECATED renewal
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; for w in {1..7}; do printf '%d %d\n' $w $((w * 3)); done; true ; } > /tmp/area-4/182515_2016
+            echo "wrote $(wc -c </tmp/area-4/182515_2016) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - '182515_2016'
+  build-full-test-matrix:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Check stage output
+          command: |
+            awk 'END{print NR>0?"has content":"empty"}' /tmp/area-4/182515_2016 2>/dev/null || true
+      - run:
+          name: Clone workspace
+          command: git clone --depth 2 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Restore build cache
+          command: cat stage-images-v3.tar | tar xf -
+      - run:
+          command: /bin/bash -c "./parse-02"
+  zuluCharlie2:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: scale out WIP
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; echo;echo "sunny today";echo; true ; } > /tmp/area-4/run_776
+            echo "wrote $(wc -c </tmp/area-4/run_776) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'run_776'
+  WEB-246:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Check stage output
+          command: |
+            awk 'END{print NR>0?"has content":"empty"}' /tmp/area-4/run_776 2>/dev/null || true
+      - run:
+          name: Clone workspace
+          command: git clone --depth 2 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Pull reference data
+          command: cat stage-images-v3.tar | tar xf -
+      - run:
+          command: /bin/bash -c "./parse-02"
+  cherry-trace-scope:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Wipe Or Sync The Upload Folder
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; echo 42 > "/tmp/journal-binder.tmp" && wc -c < "/tmp/journal-binder.tmp"; true ; } > /tmp/area-4/drift_spark_atom
+            echo "wrote $(wc -c </tmp/area-4/drift_spark_atom) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'drift_spark_atom'
+  rust-bench:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Check stage output
+          command: |
+            awk 'END{print NR>0?"has content":"empty"}' /tmp/area-4/drift_spark_atom 2>/dev/null || true
+      - run:
+          name: Clone workspace
+          command: git clone --depth 2 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Stage inputs
+          command: cat stage-images-v3.tar | tar xf -
+      - run:
+          command: /bin/bash -c "./parse-02"
+  SPRINT_202608:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Store Slides Phase
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; command ls --classify $HOME | nl; true ; } > /tmp/area-4/bkp.cd.io
+            echo "wrote $(wc -c </tmp/area-4/bkp.cd.io) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'bkp.cd.io'
+  run-end-to-end-test-matrix:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Check stage output
+          command: |
+            awk 'END{print NR>0?"has content":"empty"}' /tmp/area-4/bkp.cd.io 2>/dev/null || true
+      - run:
+          name: Clone workspace
+          command: git clone --depth 2 -q --no-single-branch --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack bundle
+          command: cat stage-images-v3.tar | tar xf -
+      - run:
+          command: /bin/bash -c "./parse-02"
+
+  MUFFIN:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: So we can sleep dispatch the pallets
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; printf 'id,item,qty,price\n1,plum,5,15.15\n2,grape,13,5.90\n3,peach,18,22.26\n4,lemon,13,44.27\n' >'/dev/shm/grid_old.dat'&&awk -F, 'NR>1' '/dev/shm/grid_old.dat' | wc -l; true ; } > /tmp/area-4/cbab70690bc981308ec484fb31bdfeff5aaea36
+            echo "wrote $(wc -c </tmp/area-4/cbab70690bc981308ec484fb31bdfeff5aaea36) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'cbab70690bc981308ec484fb31bdfeff5aaea36'
+  rd6:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Set heading 285
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; ls -S1G --quoting-style=shell|nl; true ; } > /tmp/area-4/CobaltRedTradeGlacier
+            echo "wrote $(wc -c </tmp/area-4/CobaltRedTradeGlacier) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'CobaltRedTradeGlacier'
+  teardownTraitGradient:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Wait for the tab bar to appear
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; find /opt -maxdepth 3 -type f -exec md5sum {} + 2>/dev/null | sort | head -n 2; true ; } > /tmp/area-4/obj-45
+            echo "wrote $(wc -c </tmp/area-4/obj-45) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'obj-45'
+  oscar-castle:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: sanity check the headless browser at af south
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; echo "it's done"|tr ' ' '\n'|sort; true ; } > /tmp/area-4/166gda4t
+            echo "wrote $(wc -c </tmp/area-4/166gda4t) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - '166gda4t'
+  GraphPartial:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Mirror the security desk back to tier two
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; ls -d /usr/bin/z* | awk -F "/" '{print $NF}' | nl; true ; } > /tmp/area-4/driver
+            echo "wrote $(wc -c </tmp/area-4/driver) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'driver'
+  PRD-CNT-DTL:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Sunset dedupe
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; find /dev -size -2 -ls 2> /dev/null | wc -l; true ; } > /tmp/area-4/x8ofxS4ssZ4ieLH8
+            echo "wrote $(wc -c </tmp/area-4/x8ofxS4ssZ4ieLH8) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'x8ofxS4ssZ4ieLH8'
+  VALLEY318:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: SpawnMiniMap
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; find /tmp -maxdepth 2 -type f -name "*.txt" -size -2 -exec md5sum {} + 2>/dev/null | tail -6; true ; } > /tmp/area-4/bkp.cd.io
+            echo "wrote $(wc -c </tmp/area-4/bkp.cd.io) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'bkp.cd.io'
+  DEL:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Tap the error banner please
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; echo -n '1 2 3 4 5' | sha1sum; true ; } > /tmp/area-4/meadowParserBoson
+            echo "wrote $(wc -c </tmp/area-4/meadowParserBoson) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'meadowParserBoson'
+  demi-country:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: HOVER CART ICON 2024
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; stamp=tower.bak.gz && printf '%s\n' "${stamp:1}"; true ; } > /tmp/area-4/md5_a6532da30de9
+            echo "wrote $(wc -c </tmp/area-4/md5_a6532da30de9) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'md5_a6532da30de9'
+  span130:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Start of shift check in with finance
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; while read -r line;do echo "${#line}: $line"; done < /etc/hosts; true ; } > /tmp/area-4/desertcloudtone
+            echo "wrote $(wc -c </tmp/area-4/desertcloudtone) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'desertcloudtone'
+  field-2014-w44:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Dump The Write Ahead Log Stage
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; printf '%s=%s\n' avenue 1 pitch 2 notebook 3; true ; } > /tmp/area-4/ServerCoastalHarbor
+            echo "wrote $(wc -c </tmp/area-4/ServerCoastalHarbor) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'ServerCoastalHarbor'
+  ServerLoose:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Select the modal and verify url
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; printf '%s\n' koala cat eagle bear tiger | awk '{print length($0), $0}' | sort -rn | head -n 1; true ; } > /tmp/area-4/20230412_021036
+            echo "wrote $(wc -c </tmp/area-4/20230412_021036) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - '20230412_021036'
+  Matrix-Simple:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Can we join the bronze layer yet
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; printf 'name,city,score\ndave,delhi,87\nzoe,berlin,79\nbob,nairobi,100\nheidi,rome,47\n' >/tmp/notebook.txt && head -n 1 /tmp/notebook.txt | tr , "\n"; true ; } > /tmp/area-4/dCV
+            echo "wrote $(wc -c </tmp/area-4/dCV) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'dCV'
+  uniColumn:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Ideate on approval
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; find /usr/lib -maxdepth 2 -name '*.py' -exec echo {} + 2> /dev/null|nl; true ; } > /tmp/area-4/fnv_7fdfa9f
+            echo "wrote $(wc -c </tmp/area-4/fnv_7fdfa9f) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'fnv_7fdfa9f'
+  szConstJobCallback:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: On success summarize the partner team
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; echo 1119 | numfmt --to=iec; true ; } > /tmp/area-4/b24ad6a3-7cb5
+            echo "wrote $(wc -c </tmp/area-4/b24ad6a3-7cb5) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'b24ad6a3-7cb5'
+  storePct:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: double tap skeleton loader
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; locale -a | pr -3 -t | fold -w 28 | expand -t 5; true ; } > /tmp/area-4/PacketShaderDelta
+            echo "wrote $(wc -c </tmp/area-4/PacketShaderDelta) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'PacketShaderDelta'
+  scarf:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: noop
+          command: |
+            mkdir -p /tmp/area-4
+            set +o pipefail 2>/dev/null; # final a
+            true > /tmp/area-4/cedar.log; seq 1 677871 >> /tmp/area-4/cedar.log; true
+            echo "wrote $(wc -c </tmp/area-4/cedar.log) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'cedar.log'
+  foo_bar:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Offboard the ID badges
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; echo -n 'something went wrong'|sha224sum; true ; } > /tmp/area-4/scratch-1554792d
+            echo "wrote $(wc -c </tmp/area-4/scratch-1554792d) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'scratch-1554792d'
+  strings_ps:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Cleared for mirroring
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; echo yes | tee /tmp/star.list "/tmp/retro-pitch-stadium.old" >/dev/null && cat "/tmp/retro-pitch-stadium.old"; true ; } > /tmp/area-4/MD5-omega
+            echo "wrote $(wc -c </tmp/area-4/MD5-omega) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'MD5-omega'
+  asynczonecache:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: 2024 scratch space shredding
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; lscpu|head -n15; true ; } > /tmp/area-4/drift_spark_atom
+            echo "wrote $(wc -c </tmp/area-4/drift_spark_atom) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'drift_spark_atom'
+  errorBlockDir:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: ADMIN386 Follow Up
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; expr split : '[a-z]*'; true ; } > /tmp/area-4/229.152.120.93
+            echo "wrote $(wc -c </tmp/area-4/229.152.120.93) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - '229.152.120.93'
+  inactiveYes:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Hoist the log files
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; for num in lisbon cairo lima seoul zurich; do echo -n "${num} "; done; echo; true ; } > /tmp/area-4/run_776
+            echo "wrote $(wc -c </tmp/area-4/run_776) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'run_776'
+  juliett-cursor:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Winding down the orphan jobs
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; printf '%s\n' 67 33 74 56 > "/var/tmp/image_shard.dat" && sort -n -o "/var/tmp/image_shard.dat" "/var/tmp/image_shard.dat" && cat "/var/tmp/image_shard.dat"; true ; } > /tmp/area-4/a701l.p014r.41pha.n0r7h
+            echo "wrote $(wc -c </tmp/area-4/a701l.p014r.41pha.n0r7h) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'a701l.p014r.41pha.n0r7h'
+  HH-OFFSET-X:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Bench the feature store
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; find /usr/share -maxdepth 1 -type f -name '*.conf' -ctime -7 -print0 | xargs -0r md5sum | head -3; true ; } > /tmp/area-4/20270624_070447
+            echo "wrote $(wc -c </tmp/area-4/20270624_070447) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - '20270624_070447'
+  psi_pred:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: dont forget to truncate the metadata catalog
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; cat /etc/skel/.profile | tr -s ' ' | sort | tac; true ; } > /tmp/area-4/v.3.20
+            echo "wrote $(wc -c </tmp/area-4/v.3.20) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'v.3.20'
+  c0mp137ez:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: I will diff the chaos scenarios tonight
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; ls -gF | awk '{print $3}' | sort -u; true ; } > /tmp/area-4/182515_2016
+            echo "wrote $(wc -c </tmp/area-4/182515_2016) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - '182515_2016'
+  LC_PS:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: Quantize the slow query log
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; printf 'member\t42\nretro\t55\nplan\t3\nhandler\t84\n' >"/var/tmp/scriptszebra.dat" && sort -k2 -n "/var/tmp/scriptszebra.dat"; true ; } > /tmp/area-4/west_draft_sweep_velvet
+            echo "wrote $(wc -c </tmp/area-4/west_draft_sweep_velvet) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'west_draft_sweep_velvet'
+  WIDTH969:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: review case study
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; cp -r /etc/skel '/tmp/im01' && ls -A '/tmp/im01'; true ; } > /tmp/area-4/rusty394
+            echo "wrote $(wc -c </tmp/area-4/rusty394) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'rusty394'
+  Joystick:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: GREEN PREP GATE
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; sort /etc/os-release |cut -d "=" -f 2- |sort; true ; } > /tmp/area-4/meadow-noise-grove
+            echo "wrote $(wc -c </tmp/area-4/meadow-noise-grove) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'meadow-noise-grove'
+  saveMotorTax:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/area-4
+      - run:
+          name: AUTO unmount
+          command: |
+            mkdir -p /tmp/area-4
+            { set +o pipefail 2>/dev/null; tar czf /tmp/village.tar.gz -C /etc hosts && tar -xzOf /tmp/village.tar.gz hosts | head -3; true ; } > /tmp/area-4/tmp-4a4485c
+            echo "wrote $(wc -c </tmp/area-4/tmp-4a4485c) B to disk"
+      - persist_to_workspace:
+          root: /tmp/area-4
+          paths:
+            - 'tmp-4a4485c'
+workflows:
+  matrix:
+    jobs:
+      - Revoke-WSConst
+      - MUFFIN:
+          requires:
+            - Revoke-WSConst
+      - vega:
+          requires:
+            - MUFFIN
+      - pull_or:
+          requires:
+            - MUFFIN
+      - rd6:
+          requires:
+            - pull_or
+      - node20-cov:
+          requires:
+            - rd6
+      - wrapper_restart_parsed_canvas:
+          requires:
+            - rd6
+      - teardownTraitGradient:
+          requires:
+            - wrapper_restart_parsed_canvas
+      - hu-push:
+          requires:
+            - teardownTraitGradient
+      - edgespritelazy:
+          requires:
+            - teardownTraitGradient
+      - oscar-castle:
+          requires:
+            - edgespritelazy
+      - CORE-294:
+          requires:
+            - oscar-castle
+      - stash-kyle-camera:
+          requires:
+            - oscar-castle
+      - GraphPartial:
+          requires:
+            - stash-kyle-camera
+      - uma-push:
+          requires:
+            - GraphPartial
+      - b1581a:
+          requires:
+            - GraphPartial
+      - PRD-CNT-DTL:
+          requires:
+            - b1581a
+      - Package_Suite8:
+          requires:
+            - PRD-CNT-DTL
+      - SPRINT_202608:
+          requires:
+            - PRD-CNT-DTL
+      - VALLEY318:
+          requires:
+            - SPRINT_202608
+      - run-end-to-end-test-matrix:
+          requires:
+            - VALLEY318
+      - TYZVPL-39484a:
+          requires:
+            - VALLEY318
+      - DEL:
+          requires:
+            - TYZVPL-39484a
+      - intergration:
+          requires:
+            - DEL
+      - ManifestTempReceiptVertex
+      - demi-country:
+          requires:
+            - ManifestTempReceiptVertex
+      - juliet-8:
+          requires:
+            - demi-country
+      - NullErrorUtils:
+          requires:
+            - demi-country
+      - span130:
+          requires:
+            - NullErrorUtils
+      - alice-build:
+          requires:
+            - span130
+      - TEXTURE_2:
+          requires:
+            - span130
+      - field-2014-w44:
+          requires:
+            - TEXTURE_2
+      - v7-preview:
+          requires:
+            - field-2014-w44
+      - mesage:
+          requires:
+            - field-2014-w44
+      - ServerLoose:
+          requires:
+            - mesage
+      - ensure-end-to-end-regression-suite:
+          requires:
+            - ServerLoose
+      - Mount-PointerProperty:
+          requires:
+            - ServerLoose
+      - Matrix-Simple:
+          requires:
+            - Mount-PointerProperty
+      - refactor-1895:
+          requires:
+            - Matrix-Simple
+      - servoHdl:
+          requires:
+            - Matrix-Simple
+      - uniColumn:
+          requires:
+            - servoHdl
+      - yolo:
+          requires:
+            - uniColumn
+      - IoT_INIT:
+          requires:
+            - uniColumn
+      - szConstJobCallback:
+          requires:
+            - IoT_INIT
+      - oct14-canary:
+          requires:
+            - szConstJobCallback
+      - raw_time:
+          requires:
+            - szConstJobCallback
+      - storePct:
+          requires:
+            - raw_time
+      - py311-release:
+          requires:
+            - storePct
+      - dwFlagsDiscountClosedMenu:
+          requires:
+            - storePct
+      - scarf:
+          requires:
+            - dwFlagsDiscountClosedMenu
+      - v4-rc5:
+          requires:
+            - scarf
+      - pluginIsNull
+      - foo_bar:
+          requires:
+            - pluginIsNull
+      - biuld:
+          requires:
+            - foo_bar
+      - ReactiveNonBlockingCommandApi:
+          requires:
+            - foo_bar
+      - strings_ps:
+          requires:
+            - ReactiveNonBlockingCommandApi
+      - ValidateImage:
+          requires:
+            - strings_ps
+      - cherry-trace-scope:
+          requires:
+            - strings_ps
+      - asynczonecache:
+          requires:
+            - cherry-trace-scope
+      - rust-bench:
+          requires:
+            - asynczonecache
+      - uat-local-56:
+          requires:
+            - asynczonecache
+      - errorBlockDir:
+          requires:
+            - uat-local-56
+      - teh-ci-83:
+          requires:
+            - errorBlockDir
+      - zuluCharlie2:
+          requires:
+            - errorBlockDir
+      - inactiveYes:
+          requires:
+            - zuluCharlie2
+      - WEB-246:
+          requires:
+            - inactiveYes
+      - M35
+      - juliett-cursor:
+          requires:
+            - M35
+      - validate-production-artifact-bundle:
+          requires:
+            - juliett-cursor
+      - Grant-HostItem:
+          requires:
+            - juliett-cursor
+      - HH-OFFSET-X:
+          requires:
+            - Grant-HostItem
+      - node20-test:
+          requires:
+            - HH-OFFSET-X
+      - fix-row-active:
+          requires:
+            - HH-OFFSET-X
+      - psi_pred:
+          requires:
+            - fix-row-active
+      - fx-old:
+          requires:
+            - psi_pred
+      - stack-2022-09-15:
+          requires:
+            - psi_pred
+      - c0mp137ez:
+          requires:
+            - stack-2022-09-15
+      - build-full-test-matrix:
+          requires:
+            - c0mp137ez
+      - uq_Digest:
+          requires:
+            - c0mp137ez
+      - LC_PS:
+          requires:
+            - uq_Digest
+      - ensure-staging-artifact-bundle:
+          requires:
+            - LC_PS
+      - clipsecondarypeek:
+          requires:
+            - LC_PS
+      - WIDTH969:
+          requires:
+            - clipsecondarypeek
+      - rollout:
+          requires:
+            - WIDTH969
+      - NEG324:
+          requires:
+            - WIDTH969
+      - Joystick:
+          requires:
+            - NEG324
+      - go-live:
+          requires:
+            - Joystick
+      - shouldInitInstance:
+          requires:
+            - Joystick
+      - saveMotorTax:
+          requires:
+            - shouldInitInstance
+      - callisto-final:
+          requires:
+            - saveMotorTax
